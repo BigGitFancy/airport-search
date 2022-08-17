@@ -3,19 +3,24 @@ import java.util.Scanner;
 
 public class TestTask {
 
-    public static void main (String[] args){
+    public static void main (String[] args){                //13 - Это параметр с консоли
         String path = "airports.csv";
         String line = "";
         BufferedReader br = null;
         Boolean exitFlag = true;
+        HelperSearch helper = new HelperSearch();
         Scanner scanner = new Scanner(System.in);
+        int i = 0;
         do {
             try {
                 br = new BufferedReader(new FileReader(path));
                 while ((line = br.readLine()) != null) {
                     String[] oneline = line.split(",");
-                    System.out.println(oneline[0] + " " + oneline[1] + " " + oneline[2] + " " + oneline[3] + " " + oneline[4] + " " + oneline[5] + " " + oneline[6] + " " + oneline[7]);
+                    oneline = helper.mergeProblemLine(oneline);
+                    helper.initHelperSearch(oneline);
+                    System.out.println(helper.getALine());
                 }
+                helper.ender(13);
             } catch (FileNotFoundException e) {
                 System.out.println("Файл не найден, введите правильный путь к файлу");
                 System.out.println("Для выхода введите \"Выход\"");
