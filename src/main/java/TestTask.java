@@ -3,7 +3,8 @@ import java.util.Scanner;
 
 public class TestTask {
 
-    public static void main (String[] args){                //13 - Это параметр с консоли
+    public static void main (String[] args){
+        int column = 1;
         String path = "airports.csv";
         String line = "";
         BufferedReader br = null;
@@ -17,15 +18,16 @@ public class TestTask {
                 while ((line = br.readLine()) != null) {
                     String[] oneline = line.split(",");
                     oneline = helper.mergeProblemLine(oneline);
-                    helper.initHelperSearch(oneline);
-                    System.out.println(helper.getALine());
+                    helper.buildGuideArray(oneline, column);
+                    //System.out.println(helper.getALine());
                 }
-                helper.ender(13);
+                helper.ender(column);
+                helper.getAllALine();
             } catch (FileNotFoundException e) {
                 System.out.println("Файл не найден, введите правильный путь к файлу");
-                System.out.println("Для выхода введите \"Выход\"");
+                System.out.println("Для выхода введите \"Exit\"");
                 path = scanner.nextLine();
-                if (path.equals("Выход")){
+                if (path.equals("Exit")){
                     exitFlag=false;
                 }
             } catch (IOException e) {

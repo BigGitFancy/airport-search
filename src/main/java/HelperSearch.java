@@ -5,19 +5,20 @@ public class HelperSearch {
     private ArrayList<ArrayList<String>> Aline = new ArrayList<ArrayList<String>>();
     private String sameLine = "";
     private int count = 0;
-    public static int i = 0;
+    public int i = 0; //!!! сделать либо метод ГЕТ или удалить
     String str = "℧";
+
 
     public HelperSearch(){
 
     }
 
-    public void initHelperSearch(String[] line){        //создает массив с первыми элементами в строках для упрощения поиска и сортировки
+    public void buildGuideArray(String[] line, int column){        //создает массив с первыми элементами в строках для упрощения поиска и сортировки
         Aline.add(i, new ArrayList<String>());
         if (sameLine.equals("")){       //можно потом вынести в отдельный privet метод
-            sameLine = line[13];        //добавить параметр запуска
+            sameLine = line[column];        //добавить параметр запуска
         }
-        if (sameLine.equals(line[13]) && (i == count)){         //и сюда
+        if (sameLine.equals(line[column]) && (i == count)){         //и сюда
             count++;
         }
         for(int j = 0; j<line.length; j++){
@@ -34,17 +35,24 @@ public class HelperSearch {
             }
             }
 
-        }
 
+        }
+        Aline.get(i).add(line.length, Integer.toString(i+1));   //добавляем id строки, чтоб не потерялся при сортировке
         i++;
 
     }
 
-    public String getALine() {
-
-        return Aline.get(i - 1).toString();
+    public void getAllALine(){
+        for (int x = 0; x < i; x++){
+            System.out.println(Aline.get(x).toString());
+        }
 
     }
+
+    public String getALine() {
+        return Aline.get(i - 1).toString();
+    }
+
 
     public String[] mergeProblemLine(String[] massstr){         //если в названии есть запятая, то делает массив строк правильным
         String[] fixedLine = new String[massstr.length-1];
@@ -63,8 +71,12 @@ public class HelperSearch {
     }
 
     public void ender(int column){      //заменяет в первой строке в запрашиваемой колонке первый элемент на спецзнак, если вся колонка одинаковоя
+
         if (i == count){
             Aline.get(0).add(column, str);
+        }else {
+            SortArray sortArray = new SortArray();
+            sortArray.sortArray(Aline, column, 0, i-1);
         }
     }
 }
