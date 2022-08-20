@@ -1,18 +1,28 @@
 import java.util.ArrayList;
 
 public  class  SortArray {
+    static boolean  flagParsable = false;
     public void sortArray(ArrayList<ArrayList<String>> Aline, int columnArray, int left, int right){
     int leftMark = left;
     int rightMark = right;
     String pivot = Aline.get((leftMark + rightMark)/2).get(columnArray);
     int compareMark = 0; // если строка сравнение 0, то одинаково
-    if (isParsable(pivot)){
+    if (isParsable(pivot) && !flagParsable){
         double pivot1 = Double.parseDouble(Aline.get((leftMark + rightMark)/2).get(columnArray));
         do{
-            while (pivot1 > Double.parseDouble(Aline.get(leftMark).get(columnArray))){
+            try {
+
+                while (pivot1 > Double.parseDouble(Aline.get(leftMark).get(columnArray))) {
+                    leftMark++;
+                }
+            }catch (NumberFormatException e){
                 leftMark++;
             }
-            while (pivot1 < Double.parseDouble(Aline.get(rightMark).get(columnArray))){
+            try {
+                while (pivot1 < Double.parseDouble(Aline.get(rightMark).get(columnArray))) {
+                    rightMark--;
+                }
+            }catch (NumberFormatException e){
                 rightMark--;
             }
 
@@ -95,12 +105,15 @@ public  class  SortArray {
             sortArrayByID(Aline, left, rightMark);
         }
     }
+
     public static boolean isParsable(String input) {
         try {
             Double.parseDouble(input);
+            flagParsable = true;
             return true;
         } catch (final NumberFormatException e) {
             return false;
         }
     }
 }
+

@@ -28,7 +28,6 @@ public class HelperSearch {
 
 
 
-        //abcArray.add(i, abc.BuildABCArray(line, column, i))  ;
         Aline.get(i).add(1, Integer.toString(i+1));   //добавляем id строки, чтоб не потерялся при сортировке
         i++;
 
@@ -37,7 +36,6 @@ public class HelperSearch {
     public void getAllALine(){
         for (int x = 0; x < i; x++){
             System.out.println(Aline.get(x).toString());
-            //System.out.println(abc.get);
         }
 
     }
