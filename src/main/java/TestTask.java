@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class TestTask {
 
     public static void main (String[] args){
-        int column = 1;
+        int column = 8;
         String path = "airports.csv";
         String line = "";
         BufferedReader br = null;
@@ -22,6 +22,7 @@ public class TestTask {
                     //System.out.println(helper.getALine());
                 }
                 helper.ender(column);
+                //helper.buildABCArray();
                 helper.getAllALine();
             } catch (FileNotFoundException e) {
                 System.out.println("Файл не найден, введите правильный путь к файлу");

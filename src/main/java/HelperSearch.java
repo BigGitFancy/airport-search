@@ -3,10 +3,13 @@ import java.util.ArrayList;
 public class HelperSearch {
 
     private ArrayList<ArrayList<String>> Aline = new ArrayList<ArrayList<String>>();
+    private ArrayList<ArrayList<String>> abcArray = new ArrayList<ArrayList<String>>();
     private String sameLine = "";
     private int count = 0;
     public int i = 0; //!!! сделать либо метод ГЕТ или удалить
     String str = "℧";
+    BuildIDArray abc = new BuildIDArray();
+    int column = 0;
 
 
     public HelperSearch(){
@@ -21,23 +24,12 @@ public class HelperSearch {
         if (sameLine.equals(line[column]) && (i == count)){         //и сюда
             count++;
         }
-        for(int j = 0; j<line.length; j++){
-
-            if (line[j].charAt(0) == '"'){
-                Aline.get(i).add(j, line[j].substring(1,2));
-            }
-            else{
-                if (line[j].charAt(0) == '-'){
-                    Aline.get(i).add(j, line[j].substring(0,2));
-            }
-                else{
-                    Aline.get(i).add(j, line[j].substring(0,1));
-            }
-            }
+        Aline.get(i).add(0, line[column]);
 
 
-        }
-        Aline.get(i).add(line.length, Integer.toString(i+1));   //добавляем id строки, чтоб не потерялся при сортировке
+
+        //abcArray.add(i, abc.BuildABCArray(line, column, i))  ;
+        Aline.get(i).add(1, Integer.toString(i+1));   //добавляем id строки, чтоб не потерялся при сортировке
         i++;
 
     }
@@ -45,6 +37,7 @@ public class HelperSearch {
     public void getAllALine(){
         for (int x = 0; x < i; x++){
             System.out.println(Aline.get(x).toString());
+            //System.out.println(abc.get);
         }
 
     }
@@ -57,6 +50,7 @@ public class HelperSearch {
     public String[] mergeProblemLine(String[] massstr){         //если в названии есть запятая, то делает массив строк правильным
         String[] fixedLine = new String[massstr.length-1];
         fixedLine = massstr;
+        char gruzinI = 'İ';
         for (int i = 0; i < massstr.length; i++){
             long occCount = massstr[i].chars().filter(ch -> ch == '"').count();
             if (occCount == 1){
@@ -66,17 +60,49 @@ public class HelperSearch {
                 }
                 System.arraycopy(massstr, 0, fixedLine,0,massstr.length-1);
             }
+            if (0 < fixedLine[i].lastIndexOf("[Duplicate]")){
+                StringBuilder delKvadr = new StringBuilder(fixedLine[i]);
+                delKvadr.delete(delKvadr.lastIndexOf("["),delKvadr.lastIndexOf("]")+2);
+                fixedLine[i] = delKvadr.toString();
+            }
+            if (0 < fixedLine[i].lastIndexOf(gruzinI)){
+                String bufString = "";
+                bufString = fixedLine[i].substring(1,fixedLine[i].length());
+                fixedLine[i] = '"' + str + bufString;
+            }
         }
         return fixedLine;
     }
 
     public void ender(int column){      //заменяет в первой строке в запрашиваемой колонке первый элемент на спецзнак, если вся колонка одинаковоя
-
+        this.column = column;       //возможно перенести в инициализацию
         if (i == count){
-            Aline.get(0).add(column, str);
+            Aline.get(0).add(0, str);
         }else {
             SortArray sortArray = new SortArray();
-            sortArray.sortArray(Aline, column, 0, i-1);
+            sortArray.sortArray(Aline, 0,0, i-1);
+
         }
     }
+
+    public void buildABCArray(){
+        BuildIDArray buildIDArray = new BuildIDArray();
+        buildIDArray.buildABCArray(Aline);
+        buildIDArray.getABCArray();
+    }
+
 }
+    /*String buf = Aline.get(0).get(0); Для сортировки ID
+    int borderRight = 0;
+    int borderLeft = 0;
+            for (int x =1; x<i-1; x++){
+        if (Aline.get(x).get(0).equals(buf)){
+        borderRight++;
+        }else{
+        sortArray.sortArrayByID(Aline, 1, borderLeft, borderRight);
+        buf = Aline.get(x+1).get(0);
+        borderRight++;
+        borderLeft = borderRight;
+        }
+        }
+        sortArray.sortArray(Aline, 1, borderLeft, i-1);*/
