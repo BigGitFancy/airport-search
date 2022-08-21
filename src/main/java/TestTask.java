@@ -29,7 +29,7 @@ public class TestTask {
                     helper.buildGuideArray(oneline, this.column);
                 }
                 helper.ender(this.column);
-                helper.buildABCArray();       //удалить вывод массива
+                helper.buildABCArray();
                 //helper.getAllALine();
             } catch (FileNotFoundException e) {
                 System.out.println("Файл не найден, введите правильный путь к файлу");
@@ -53,12 +53,11 @@ public class TestTask {
             }
         }while(exitFlag);
     }
-        //long
+
     public void searching(ArrayList<ArrayList<String>> outArray, String userLine){                     //пока только для букв, потом сделать проверку для чисел и для
-        //long start = System.currentTimeMillis();
+
         helper.searching(outArray, userLine);
-        //long finish = System.currentTimeMillis();
-        //long elapsed = finish - start;
+
     }
 
     public int getMinID(){

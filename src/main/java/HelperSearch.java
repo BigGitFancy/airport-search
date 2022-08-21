@@ -6,7 +6,7 @@ public class HelperSearch {
     private final ArrayList<ArrayList<String>> Aline = new ArrayList<ArrayList<String>>();
     private String sameLine = "";
     private int count = 0;
-    public int i = 0; //!!! сделать либо метод ГЕТ или удалить
+    public int numbersOfLines = 0;
     String str = "℧";
     BuildIDArray buildIDArray = new BuildIDArray();
     int column = 0;
@@ -19,20 +19,23 @@ public class HelperSearch {
 
     public void searching(ArrayList<ArrayList<String>> outArray, String userLine){
         String firstSymbol = "";
-        ArrayList<String> buf;
+        ArrayList<String> buf = null;
         nothing.add("!");
         int count = 0;
         ArrayList<Integer> beginEndArray = new ArrayList<>();
         if (!userLine.isEmpty()){
             if (userLine.charAt(0) == '-'){
                 firstSymbol = userLine.substring(0,2);
-            }else {
+            }else if (userLine.equals("İ"))
+                {
+                firstSymbol = "ℂ" + userLine.substring(1);
+            }else{
                 firstSymbol = userLine.substring(0,1);
             }
         }
         buildIDArray.searching(beginEndArray, firstSymbol);
         if (!beginEndArray.isEmpty()) {
-            if (Aline.get(0).get(0).equals(str)) {
+            if (Aline.get(0).get(0).equals(str)) {          // проверка на спецзнак ℧, что означает колонка состоит из одинаковых элементов
                 if(Aline.get(1).get(0).substring(1).toLowerCase(Locale.ROOT).startsWith(userLine.toLowerCase(Locale.ROOT))){
                     buf = Aline.get(0);
                     outArray.add(buf);
@@ -42,11 +45,22 @@ public class HelperSearch {
 
             } else {
                 for (int x = 0; x < beginEndArray.size(); x = x + 2) {
-                    for (int j = beginEndArray.get(x); j < beginEndArray.get(x + 1); j++) {
-                        if (Aline.get(0).get(0).substring(0,1).equals("\"")){
-                            if ((Aline.get(j).get(0).substring(1).toLowerCase(Locale.ROOT)).startsWith(userLine.toLowerCase(Locale.ROOT))) {
+                    for (int j = beginEndArray.get(x); j <= beginEndArray.get(x + 1); j++) {
+                        if (Aline.get(j).get(0).substring(1,2).equals("ℂ")){
+                            if ((Aline.get(j).get(0).substring(1).toLowerCase(Locale.ROOT)).startsWith("ℂ" + userLine.substring(1).toLowerCase(Locale.ROOT))) {
+
                                 buf = Aline.get(j);
                                 outArray.add(buf);
+
+                            }
+                        }
+                        if (Aline.get(j).get(0).substring(0,1).equals("\"")){
+                            if ((Aline.get(j).get(0).substring(1).toLowerCase(Locale.ROOT)).startsWith(userLine.toLowerCase(Locale.ROOT))) {
+
+
+                                    buf = Aline.get(j);
+                                    outArray.add(buf);
+
                         }
                         }else {
                             if ((Aline.get(j).get(0)).startsWith(userLine)) {
@@ -61,38 +75,39 @@ public class HelperSearch {
     }
 
     public void buildGuideArray(String[] line, int column){        //создает массив с первыми элементами в строках для упрощения поиска и сортировки
-        Aline.add(i, new ArrayList<String>());
-        if (sameLine.equals("")){       //можно потом вынести в отдельный privet метод
-            sameLine = line[column];        //добавить параметр запуска
+        Aline.add(numbersOfLines, new ArrayList<String>());
+        if (sameLine.equals("")){
+            sameLine = line[column];
         }
-        if (sameLine.equals(line[column]) && (i == count)){         //и сюда
+        if (sameLine.equals(line[column]) && (numbersOfLines == count)){
             count++;
         }
-        Aline.get(i).add(0, line[column]);
+        Aline.get(numbersOfLines).add(0, line[column]);
 
 
 
-        Aline.get(i).add(1, Integer.toString(i+1));   //добавляем id строки, чтоб не потерялся при сортировке
-        i++;
+        Aline.get(numbersOfLines).add(1, Integer.toString(numbersOfLines +1));   //добавляем id строки, чтоб не потерялся при сортировке
+        numbersOfLines++;
 
     }
 
     public void getAllALine(){
-        for (int x = 0; x < i; x++){
+        for (int x = 0; x < numbersOfLines; x++){
             System.out.println(Aline.get(x).toString());
         }
 
     }
 
     public String getALine() {
-        return Aline.get(i - 1).toString();
+        return Aline.get(numbersOfLines - 1).toString();
     }
 
 
-    public String[] mergeProblemLine(String[] massstr){         //если в названии есть запятая, то делает массив строк правильным
+    public String[] mergeProblemLine(String[] massstr){         //если в названии есть запятая, то делает массив строк правильным, если встретиться [Duplicate], то удалит, İ поменяет на знак ℂ, тк метод compareTo не читает ее
         String[] fixedLine = new String[massstr.length-1];
         fixedLine = massstr;
         char gruzinI = 'İ';
+        String doplerGruzinI = "ℂ";
         for (int i = 0; i < massstr.length; i++){
             long occCount = massstr[i].chars().filter(ch -> ch == '"').count();
             if (occCount == 1){
@@ -109,41 +124,27 @@ public class HelperSearch {
             }
             if (0 < fixedLine[i].lastIndexOf(gruzinI)){
                 String bufString = "";
-                bufString = fixedLine[i].substring(1,fixedLine[i].length());
-                fixedLine[i] = '"' + str + bufString;
+                bufString = fixedLine[i].substring(2,fixedLine[i].length());
+                fixedLine[i] = '"' + doplerGruzinI + bufString;
             }
         }
         return fixedLine;
     }
 
     public void ender(int column){      //заменяет в первой строке в запрашиваемой колонке первый элемент на спецзнак, если вся колонка одинаковоя
-        this.column = column;       //возможно перенести в инициализацию
-        if (i == count){
+        this.column = column;
+        if (numbersOfLines == count){
             Aline.get(0).add(0, str);
         }else {
             SortArray sortArray = new SortArray();
-            sortArray.sortArray(Aline, 0,0, i-1);
+            sortArray.sortArray(Aline, 0,0, numbersOfLines -1);
 
         }
     }
 
     public void buildABCArray(){
         buildIDArray.buildABCArray(Aline);
-        //buildIDArray.getABCArray();
+
     }
 
 }
-    /*String buf = Aline.get(0).get(0); Для сортировки ID
-    int borderRight = 0;
-    int borderLeft = 0;
-            for (int x =1; x<i-1; x++){
-        if (Aline.get(x).get(0).equals(buf)){
-        borderRight++;
-        }else{
-        sortArray.sortArrayByID(Aline, 1, borderLeft, borderRight);
-        buf = Aline.get(x+1).get(0);
-        borderRight++;
-        borderLeft = borderRight;
-        }
-        }
-        sortArray.sortArray(Aline, 1, borderLeft, i-1);*/

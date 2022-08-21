@@ -1,13 +1,12 @@
 import java.util.ArrayList;
 
-public  class  SortArray {
-    static boolean  flagParsable = false;
+public  class  SortArray {              //реализация quicksort
     public void sortArray(ArrayList<ArrayList<String>> Aline, int columnArray, int left, int right){
     int leftMark = left;
     int rightMark = right;
     String pivot = Aline.get((leftMark + rightMark)/2).get(columnArray);
     int compareMark = 0; // если строка сравнение 0, то одинаково
-    if (isParsable(pivot)){
+    if (isParsable(pivot)){             //если встречается число, то сортируется по числовому порядку, если нет чисел, то сортируется в лексиграфическом порядке
         double pivot1 = Double.parseDouble(Aline.get((leftMark + rightMark)/2).get(columnArray));
         do{
             try {
@@ -74,42 +73,10 @@ public  class  SortArray {
     }
 }
 
-    public void sortArrayByID(ArrayList<ArrayList<String>> Aline, int left, int right){
-        int leftMark = left;
-        int rightMark = right;
-        int pivot = Integer.parseInt(Aline.get((leftMark + rightMark)/2).get(0));
-        do{
-            while (pivot > Integer.parseInt(Aline.get(leftMark).get(0))){
-                leftMark++;
-            }
-            while (pivot < Integer.parseInt(Aline.get(rightMark).get(0))){
-                rightMark--;
-            }
-
-            if (leftMark <= rightMark){
-                if (leftMark < rightMark){
-                    ArrayList<String> buf = Aline.get(leftMark);
-                    Aline.set(leftMark, Aline.get(rightMark));
-                    Aline.set(rightMark, buf);
-                }
-                leftMark++;
-                rightMark--;
-            }
-
-        }while (leftMark <= rightMark);
-
-        if (leftMark < right){
-            sortArrayByID(Aline,leftMark, right);
-        }
-        if (left < rightMark){
-            sortArrayByID(Aline, left, rightMark);
-        }
-    }
 
     public static boolean isParsable(String input) {
         try {
             Double.parseDouble(input);
-            flagParsable = true;
             return true;
         } catch (final NumberFormatException e) {
             return false;

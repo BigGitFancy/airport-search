@@ -102,7 +102,7 @@ public class Input {
                                 for (int i = 0; i < outArray.size(); i++){
                                     System.out.println(outArray.get(i));
                                 }
-                                System.out.println("Найдено строк: " + count + " Время затраченное на поиск: " + elapsed + " мс");
+                                System.out.println("Найдено строк: " + outArray.size() + " Время затраченное на поиск: " + elapsed + " мс");
                             }
 
                         }catch (IOException e) {
@@ -114,10 +114,6 @@ public class Input {
                 outArray.get(0).remove(0);
             }else {
                 outArray = null;
-                /*for (int i = 0; i < outArray.size(); i++) {
-                    outArray.get(i).clear();
-                }*/
-                //outArray.clear();
             }
             System.out.println("Введите строку: ");
             inputString= in.nextLine();
