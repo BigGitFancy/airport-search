@@ -1,9 +1,18 @@
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class BuildIDArray {
 
-    ArrayList<String> idBeginEndSymbol = new ArrayList<>();
     public ArrayList<ArrayList<String>> abcArray = new ArrayList<>();
+
+    public void searching(ArrayList<Integer> beginEndArray, String firstSymbol){
+        for(int x = 0; x < abcArray.size(); x++){
+            if (firstSymbol.toLowerCase(Locale.ROOT).equals(abcArray.get(x).get(0).toLowerCase(Locale.ROOT))){
+                beginEndArray.add(Integer.parseInt(abcArray.get(x).get(1)));
+                beginEndArray.add(Integer.parseInt(abcArray.get(x).get(2)));
+            }
+        }
+    }
 
     public void buildABCArray(ArrayList<ArrayList<String>> Aline) {    //создание массива с первыми символами
         int countLines = 0;

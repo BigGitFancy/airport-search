@@ -1,18 +1,24 @@
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Timer;
 
 public class TestTask {
+
+    public TestTask(){
+
+    }
+    int id;
     Scanner scanner = new Scanner(System.in);
-    int column;
+    int column = 1;
+    HelperSearch helper = new HelperSearch();
+
     public void testTaskInit(int column){
         this.column = column;
         String path = "airports.csv";
         String line = "";
         BufferedReader br = null;
         boolean exitFlag = true;
-        HelperSearch helper = new HelperSearch();
-
         int i = 0;
         do {
             try {
@@ -21,10 +27,9 @@ public class TestTask {
                     String[] oneline = line.split(",");
                     oneline = helper.mergeProblemLine(oneline);
                     helper.buildGuideArray(oneline, this.column);
-                    //System.out.println(helper.getALine());
                 }
                 helper.ender(this.column);
-                helper.buildABCArray();
+                helper.buildABCArray();       //удалить вывод массива
                 //helper.getAllALine();
             } catch (FileNotFoundException e) {
                 System.out.println("Файл не найден, введите правильный путь к файлу");
@@ -47,15 +52,32 @@ public class TestTask {
                 }
             }
         }while(exitFlag);
-        //scanner.close();
-        //System.out.println("END");
-
+    }
+        //long
+    public void searching(ArrayList<ArrayList<String>> outArray, String userLine){                     //пока только для букв, потом сделать проверку для чисел и для
+        //long start = System.currentTimeMillis();
+        helper.searching(outArray, userLine);
+        //long finish = System.currentTimeMillis();
+        //long elapsed = finish - start;
     }
 
-    public void searching(String userLine){                     //пока только для букв, потом сделать проверку для чисел и для
-        long start = System.currentTimeMillis();
-        char firstSymbol = userLine.charAt(0);
-        long finish = System.currentTimeMillis();
-        long elapsed = finish - start;
+    public int getMinID(){
+        return id;
+    }
+
+    public int minID(ArrayList<ArrayList<String>> outArray){
+        int min = Integer.MAX_VALUE;
+        for (int x = 0; x < outArray.size(); x++){
+            try {
+                if ((Integer.parseInt(outArray.get(x).get(1)) < min) && (outArray.get(x).size() == 2)){
+                    min = Integer.parseInt(outArray.get(x).get(1));
+                    id = x;
+                }
+            }catch (NumberFormatException e){
+                continue;
+            }
+
+        }
+        return min;
     }
 }

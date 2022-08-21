@@ -1,19 +1,63 @@
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class HelperSearch {
 
-    private ArrayList<ArrayList<String>> Aline = new ArrayList<ArrayList<String>>();
-    private ArrayList<ArrayList<String>> abcArray = new ArrayList<ArrayList<String>>();
+    private final ArrayList<ArrayList<String>> Aline = new ArrayList<ArrayList<String>>();
     private String sameLine = "";
     private int count = 0;
     public int i = 0; //!!! сделать либо метод ГЕТ или удалить
     String str = "℧";
-    BuildIDArray abc = new BuildIDArray();
+    BuildIDArray buildIDArray = new BuildIDArray();
     int column = 0;
+    ArrayList<String> nothing = new ArrayList<>();
 
 
     public HelperSearch(){
 
+    }
+
+    public void searching(ArrayList<ArrayList<String>> outArray, String userLine){
+        String firstSymbol = "";
+        ArrayList<String> buf;
+        nothing.add("!");
+        int count = 0;
+        ArrayList<Integer> beginEndArray = new ArrayList<>();
+        if (!userLine.isEmpty()){
+            if (userLine.charAt(0) == '-'){
+                firstSymbol = userLine.substring(0,2);
+            }else {
+                firstSymbol = userLine.substring(0,1);
+            }
+        }
+        buildIDArray.searching(beginEndArray, firstSymbol);
+        if (!beginEndArray.isEmpty()) {
+            if (Aline.get(0).get(0).equals(str)) {
+                if(Aline.get(1).get(0).substring(1).toLowerCase(Locale.ROOT).startsWith(userLine.toLowerCase(Locale.ROOT))){
+                    buf = Aline.get(0);
+                    outArray.add(buf);
+                }else {
+                    outArray.add(nothing);
+                }
+
+            } else {
+                for (int x = 0; x < beginEndArray.size(); x = x + 2) {
+                    for (int j = beginEndArray.get(x); j < beginEndArray.get(x + 1); j++) {
+                        if (Aline.get(0).get(0).substring(0,1).equals("\"")){
+                            if ((Aline.get(j).get(0).substring(1).toLowerCase(Locale.ROOT)).startsWith(userLine.toLowerCase(Locale.ROOT))) {
+                                buf = Aline.get(j);
+                                outArray.add(buf);
+                        }
+                        }else {
+                            if ((Aline.get(j).get(0)).startsWith(userLine)) {
+                                buf = Aline.get(j);
+                                outArray.add(buf);
+                            }
+                        }
+                    }
+                }
+            }
+        }else outArray.add(nothing);
     }
 
     public void buildGuideArray(String[] line, int column){        //создает массив с первыми элементами в строках для упрощения поиска и сортировки
@@ -84,9 +128,8 @@ public class HelperSearch {
     }
 
     public void buildABCArray(){
-        BuildIDArray buildIDArray = new BuildIDArray();
         buildIDArray.buildABCArray(Aline);
-        buildIDArray.getABCArray();
+        //buildIDArray.getABCArray();
     }
 
 }

@@ -7,7 +7,7 @@ public  class  SortArray {
     int rightMark = right;
     String pivot = Aline.get((leftMark + rightMark)/2).get(columnArray);
     int compareMark = 0; // если строка сравнение 0, то одинаково
-    if (isParsable(pivot) && !flagParsable){
+    if (isParsable(pivot)){
         double pivot1 = Double.parseDouble(Aline.get((leftMark + rightMark)/2).get(columnArray));
         do{
             try {
